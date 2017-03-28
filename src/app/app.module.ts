@@ -12,6 +12,8 @@ import { AuthService } from './shared/auth.service';
 import { AuthGuard } from './shared/auth.guard';
 import { NotAuthGuard } from './shared/notauth.guard';
 import { HomeComponent } from './home.component';
+import { AlertsService } from './shared/alerts/alerts.service';
+import { AlertsComponent } from './shared/alerts/alerts.component';
 
 export const firebaseConfig = {
   apiKey: '',
@@ -25,6 +27,7 @@ export const firebaseConfig = {
   declarations: [
     AppComponent,
     HeaderComponent,
+    AlertsComponent,
     HomeComponent
   ],
   imports: [
@@ -40,7 +43,8 @@ export const firebaseConfig = {
   providers: [
     AuthService,
     AuthGuard,
-    NotAuthGuard
+    NotAuthGuard,
+    AlertsService,
   ],
   bootstrap: [AppComponent]
 })

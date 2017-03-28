@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../shared/auth.service';
+import { AlertsService} from '../shared/alerts/alerts.service';
 
 @Component({
   selector: 'app-login',
@@ -12,11 +13,8 @@ import { AuthService } from '../shared/auth.service';
 export class LoginComponent implements OnInit {
   alerts = [];
 
-  constructor(private authService: AuthService, private router: Router) { }
-
-  onCloseAlert(alert) {
-    this.alerts.splice(this.alerts.indexOf(alert), 1);
-  }
+  constructor(private authService: AuthService, private router: Router,
+    private alertsService: AlertsService) { }
   
   onSubmit(loginForm: NgForm) {
     this.authService.loginUser(loginForm.value).first()
@@ -25,10 +23,10 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/profile'])
       },
       (error) => {
-        this.alerts.push({
+        this.alertsService.addAlert({
           type: 'danger',
           message: 'Could not log in. Please check e-mail and password.'
-        })
+        }, true);
       }
     );
   }

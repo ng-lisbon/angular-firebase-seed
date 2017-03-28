@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
 import { AuthService } from '../shared/auth.service';
+import { AlertsService } from '../shared/alerts/alerts.service';
 
 @Component({
   selector: 'app-action',
@@ -15,30 +16,25 @@ export class ActionComponent implements OnInit {
   wasPasswordReset = false;
   wasPasswordResetError = false;
   oobCode: string;
-  alerts = [];
 
   constructor(private activatedRoute: ActivatedRoute,
-    private authService: AuthService) { }
+    private authService: AuthService, private alertsService: AlertsService) { }
 
   onSetPassword(form: NgForm) {
     this.authService.confirmPasswordReset(this.oobCode, form.value.password)
     .subscribe(
       () => {
         form.reset();
-        this.alerts.push({
+        this.alertsService.addAlert({
           type: 'success',
           message: 'Your password was set successfully. Please try to login now.'
-        });
+        }, true);
       },
       (error) => {
         console.log(error);
         this.wasPasswordResetError = true;
       }
     );
-  }
-
-  onCloseAlert(alert) {
-    this.alerts.splice(this.alerts.indexOf(alert), 1);
   }
   
   ngOnInit() {

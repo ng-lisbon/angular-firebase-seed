@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../shared/auth.service';
+import { AlertsService } from '../shared/alerts/alerts.service';
 
 @Component({
   selector: 'app-register',
@@ -11,13 +12,10 @@ import { AuthService } from '../shared/auth.service';
 })
 export class RegisterComponent implements OnInit {
   wasRegistered = false;
-  alerts = [];
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router,
+    private alertsService: AlertsService) { }
 
-  onCloseAlert(alert) {
-    this.alerts.splice(this.alerts.indexOf(alert), 1);
-  }
   onSubmit(registerForm: NgForm) {
     this.authService.registerUser({ email: registerForm.value.email,
       password: registerForm.value.password }).first()
@@ -26,10 +24,10 @@ export class RegisterComponent implements OnInit {
         this.wasRegistered = true
       },
       (error) => {
-        this.alerts.push({
+        this.alertsService.addAlert({
           type: 'danger',
           message: 'Could not register. Please check if your e-mail address is valid and if your password contains at least 6 characters.'
-        })
+        }, true);
       }
     );
   }

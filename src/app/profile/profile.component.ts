@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { AuthService } from '../shared/auth.service';
+import { AlertsService } from '../shared/alerts/alerts.service';
 
 @Component({
   selector: 'app-tester',
@@ -12,11 +13,8 @@ export class ProfileComponent implements OnInit {
   userEmail = '';
   alerts = [];
 
-  constructor(private authService: AuthService) { }
-
-  onCloseAlert(alert) {
-    this.alerts.splice(this.alerts.indexOf(alert), 1);
-  }
+  constructor(private authService: AuthService,
+    private alertsService: AlertsService) { }
 
   onChangeMail(form: NgForm) {
     this.authService.setMailAddress(form.value)
@@ -24,20 +22,20 @@ export class ProfileComponent implements OnInit {
       () => {
         this.userEmail = form.value.email;
         form.reset();
-        this.alerts.push({
+        this.alertsService.addAlert({
           type: 'success',
           message: 'Your e-mail address was changed successfully.'
-        });
+        }, true);
       },
       (error) => {
         let message = 'Please check if your new e-mail address is valid.';
         if (error.code == 'auth/wrong-password') {
           message = 'Please check your password.'
         }
-        this.alerts.push({
+        this.alertsService.addAlert({
           type: 'danger',
           message: 'Could not change e-mail address. ' + message
-        });
+        }, true);
       }
     );
   }
@@ -48,20 +46,20 @@ export class ProfileComponent implements OnInit {
     .subscribe(
       () => {
         form.reset()
-        this.alerts.push({
+        this.alertsService.addAlert({
           type: 'success',
           message: 'Your password was changed successfully.'
-        });
+        }, true);
       },
       (error) => {
         let message = 'Please check that your new password contains at least 6 characters.';
         if (error.code == 'auth/wrong-password') {
           message = 'Please check your old password.'
         }
-        this.alerts.push({
+        this.alertsService.addAlert({
           type: 'danger',
           message: 'Could not change password. ' + message
-        });
+        }, true);
       }
     );
   }
