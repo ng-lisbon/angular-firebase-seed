@@ -1,0 +1,67 @@
+<p *ngFor="let alert of alerts">
+  <ngb-alert [type]="alert.type" (close)="onCloseAlert(alert)">{{ alert.message }}</ngb-alert>
+</p>
+
+<div *ngIf="wasVerified">
+  <h2>Your mail has been verified!</h2>
+  <p>
+    Please <a [routerLink]="['/auth', 'login']">log in now</a>.
+  </p>
+</div>
+<div *ngIf="wasVerifiedError">
+  <h2>Oops, something went wrong...</h2>
+  <p>
+    You can try to verify again.
+  </p>
+  <p>
+    Or did you verify already? Please try to <a [routerLink]="['/auth', 'login']">log in</a>.
+  </p>
+</div>
+
+<div *ngIf="wasPasswordReset">
+  <div class="row">
+    <div class="col-md-6">
+      <h1>Set a new password</h1>
+      <form #f="ngForm" (ngSubmit)="onSetPassword(f)" novalidate>
+        <div class="form-group">
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            class="form-control"
+            required
+            ngModel
+            #password="ngModel">
+          <div class="form-control-feedback" *ngIf="password.touched && password.errors?.required">
+            Please enter a password.
+          </div>
+        </div>
+        <div class="form-group">
+          <input
+            name="confirmPassword"
+            type="password"
+            placeholder="Confirm password"
+            class="form-control"
+            required
+            ngModel
+            matchPassword
+            #confirmPassword="ngModel">
+          <div class="form-control-feedback" *ngIf="confirmPassword.touched && confirmPassword.errors?.required">
+            Please confirm the password.
+          </div>
+          <div class="form-control-feedback" *ngIf="confirmPassword.touched && confirmPassword.errors?.mismatchedPassword">
+            Passwords do not match.
+          </div>
+        </div>
+        <div>
+          <button class="btn btn-primary cp" type="submit" [disabled]="!f.valid">Set password</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div *ngIf="wasPasswordResetError">
+  <h2>Oops, something went wrong...</h2>
+  <p>
+    You can try to reset again by clicking on the link in your mail.
+  </p>

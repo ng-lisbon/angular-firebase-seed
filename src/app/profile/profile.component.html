@@ -1,0 +1,100 @@
+<p *ngFor="let alert of alerts">
+  <ngb-alert [type]="alert.type" (close)="onCloseAlert(alert)">{{ alert.message }}</ngb-alert>
+</p>
+
+<div class="row">
+  <div class="col-md-6">
+    <h2>Change e-mail address</h2>
+    <p>
+      Your current e-mail address is <b>{{ userEmail }}</b>.
+    </p>
+    <form #f="ngForm" (ngSubmit)="onChangeMail(f)" novalidate>
+      <div class="form-group">
+        <input
+          name="email"
+          type="email"
+          placeholder="Set a new e-mail address"
+          class="form-control"
+          required
+          ngModel
+          #email="ngModel">
+        <div class="form-control-feedback" *ngIf="email.touched && email.errors?.required">
+          Please enter an e-mail address.
+        </div>
+      </div>
+      <div class="form-group">
+        <input
+          name="password"
+          type="password"
+          placeholder="Enter your password"
+          class="form-control"
+          required
+          ngModel
+          #password="ngModel">
+        <div class="form-control-feedback" *ngIf="password.touched && password.errors?.required">
+          Please enter your password.
+        </div>
+      </div>
+      <div>
+        <button class="btn btn-primary cp" type="submit" [disabled]="!f.valid">Change e-mail address</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6 mt-3">
+    <h2>Change password</h2>
+    <form #fpw="ngForm" (ngSubmit)="onChangePassword(fpw)" novalidate>
+      <div class="form-group">
+        <input
+          name="oldPassword"
+          type="password"
+          placeholder="Your old password"
+          class="form-control"
+          required
+          ngModel
+          #oldPassword="ngModel">
+        <div class="form-control-feedback" *ngIf="oldPassword.touched && oldPassword.errors?.required">
+          Please enter your old password.
+        </div>
+      </div>
+      <div class="form-group">
+        <input
+          name="password"
+          type="password"
+          placeholder="Enter a new password"
+          class="form-control"
+          required
+          minlength="6"
+          ngModel
+          #password="ngModel">
+        <div class="form-control-feedback" *ngIf="password.touched && password.errors?.required">
+          Please enter a new password.
+        </div>
+        <div class="form-control-feedback" *ngIf="password.touched && password.errors?.minlength">
+          The password must contain at least 6 characters.
+        </div>
+      </div>
+      <div class="form-group">
+        <input
+          name="confirmPassword"
+          type="password"
+          placeholder="Confirm your new password"
+          class="form-control"
+          required
+          ngModel
+          matchPassword
+          #confirmPassword="ngModel">
+        <div class="form-control-feedback" *ngIf="confirmPassword.touched && confirmPassword.errors?.required">
+          Please confirm your new password.
+        </div>
+        <div class="form-control-feedback" *ngIf="confirmPassword.touched && confirmPassword.errors?.mismatchedPassword">
+          Passwords do not match.
+        </div>
+      </div>
+      <div>
+        <button class="btn btn-primary cp" type="submit" [disabled]="!fpw.valid">Change password</button>
+      </div>
+    </form>
+  </div>
+</div>
