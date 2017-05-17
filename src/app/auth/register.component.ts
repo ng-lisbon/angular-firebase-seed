@@ -17,8 +17,8 @@ export class RegisterComponent implements OnInit {
     private alertsService: AlertsService) { }
 
   onSubmit(registerForm: NgForm) {
-    this.authService.registerUser({ email: registerForm.value.email,
-      password: registerForm.value.password }).first()
+    this.authService.registerUser(registerForm.value.email,
+      registerForm.value.password)
     .subscribe(
       (auth) => {
         this.wasRegistered = true

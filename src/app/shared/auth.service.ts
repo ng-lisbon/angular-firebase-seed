@@ -2,35 +2,38 @@ import { Injectable, Inject } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import 'rxjs/Rx';
 
-import * as firebase from 'firebase';
-import { AngularFire, FirebaseApp, FirebaseAuthState } from 'angularfire2';
+import * as firebase from 'firebase/app';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 import { User } from './user.interface';
 
 @Injectable()
 export class AuthService {
 
-  constructor(private angularFire: AngularFire,
-      @Inject(FirebaseApp) private fbApp: firebase.app.App) {
+  user: Observable<firebase.User>;
+
+  constructor(private angularFireAuth: AngularFireAuth) {
+    this.user = angularFireAuth.authState;
   }
 
-  registerUser(user: User): Observable<FirebaseAuthState> {
-    const promise = this.angularFire.auth.createUser(user)
-    .then((auth) => {
-      auth.auth.sendEmailVerification();
+  registerUser(email: string, password: string): Observable<firebase.User> {
+    const promise = this.angularFireAuth.auth.createUserWithEmailAndPassword(
+      email, password)
+    .then((user) => {
+      user.sendEmailVerification();
       this.logout();
-      return auth;
+      return user;
     })
     // We output the error here for debugging purposes
     .catch((error) => {
       console.log(error);
       throw error;
     });
-    return Observable.fromPromise(<Promise<FirebaseAuthState>>promise);
+    return Observable.fromPromise(<Promise<firebase.User>>promise);
   }
 
   verifyMail(oobCode: string, apiKey: string) {
-    const auth = this.fbApp.auth();
+    const auth = this.angularFireAuth.app.auth();
     return auth.applyActionCode(oobCode)
     .catch((error) => {
       console.log(error);
@@ -39,7 +42,7 @@ export class AuthService {
   }
 
   verifyPasswordReset(oobCode: string) {
-    const auth = this.fbApp.auth();
+    const auth = this.angularFireAuth.app.auth();
     const promise = auth.verifyPasswordResetCode(oobCode)
     .catch((error) => {
       console.log(error);
@@ -49,7 +52,7 @@ export class AuthService {
   }
 
   confirmPasswordReset(oobCode: string, newPassword: string) {
-    const auth = this.fbApp.auth();
+    const auth = this.angularFireAuth.app.auth();
     const promise = auth.confirmPasswordReset(oobCode, newPassword)
     .catch((error) => {
       console.log(error);
@@ -58,17 +61,18 @@ export class AuthService {
     return Observable.fromPromise(<Promise<any>>promise);
   }
 
-  loginUser(user: User): Observable<FirebaseAuthState> {
-    const promise = this.angularFire.auth.login(user)
+  loginUser(email: string, password: string): Observable<firebase.User> {
+    const promise = this.angularFireAuth.auth.signInWithEmailAndPassword(
+      email, password)
     .catch((error) => {
       console.log('Error in auth service, loginUser: ' + error);
       throw error;
     });
-    return Observable.fromPromise(<Promise<FirebaseAuthState>>promise);
+    return Observable.fromPromise(<Promise<firebase.User>>promise);
   }
 
   logout() {
-    return this.angularFire.auth.logout()
+    return this.angularFireAuth.auth.signOut()
     .catch((error) => {
       console.log(error);
       throw error;
@@ -76,58 +80,60 @@ export class AuthService {
   }
 
   sendPasswordRequestMail(email: string): Observable<any> {
-    const auth = this.fbApp.auth();
+    const auth = this.angularFireAuth.app.auth();
     return Observable.fromPromise(<Promise<any>>auth.sendPasswordResetEmail(email));
   }
 
   getMailAddress() {
-    return this.angularFire.auth.map(
-      (auth) => auth.auth.email
+    return this.user.first()
+    .map(
+      (user: firebase.User) => user.email
     );
   }
 
   setMailAddress(newUser: User) {
-    return this.angularFire.auth.first()
+    return this.user.first()
     .flatMap(
-      (auth) => {
+      (user) => {
         const credential = firebase.auth.EmailAuthProvider.credential(
-          auth.auth.email, newUser.password
+          user.email, newUser.password
         );
-        const authenticated = new Subject<FirebaseAuthState>();
-        auth.auth.reauthenticate(credential)
-        .then(() => authenticated.next(auth))
+        const authenticated = new Subject<firebase.User>();
+        user.reauthenticate(credential)
+        .then(() => authenticated.next(user))
         .catch((error) => authenticated.error(error));
         return authenticated;
       }
     )
     .flatMap(
-      (auth) => auth.auth.updateEmail(newUser.email)
+      (user) => user.updateEmail(newUser.email)
     );
   }
 
   setPassword(oldPassword, newPassword) {
-    return this.angularFire.auth.first()
+    return this.user.first()
     .flatMap(
-      (auth) => {
+      (user) => {
         const credential = firebase.auth.EmailAuthProvider.credential(
-          auth.auth.email, oldPassword
+          user.email, oldPassword
         );
-        const authenticated = new Subject<FirebaseAuthState>();
-        auth.auth.reauthenticate(credential)
-        .then(() => authenticated.next(auth))
+        const authenticated = new Subject<firebase.User>();
+        user.reauthenticate(credential)
+        .then(() => authenticated.next(user))
         .catch((error) => authenticated.error(error));
         return authenticated;
       }
     )
     .flatMap(
-      (auth) => auth.auth.updatePassword(newPassword)
+      (user) => user.updatePassword(newPassword)
     );
   }
 
   isAuthenticated() {
-    return this.angularFire.auth.map(
-      (auth) => {
-        if (auth == null) {
+    return this.user
+    .map(
+      (user) => {
+        if (user == null) {
           return false;
         } else {
           return true;

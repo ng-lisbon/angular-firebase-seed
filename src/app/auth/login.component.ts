@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
     private alertsService: AlertsService) { }
   
   onSubmit(loginForm: NgForm) {
-    this.authService.loginUser(loginForm.value).first()
+    this.authService.loginUser(loginForm.value.email, loginForm.value.password).first()
     .subscribe(
       (auth) => {
         this.router.navigate(['/profile'])

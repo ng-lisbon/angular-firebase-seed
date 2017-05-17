@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 
 import { AppComponent } from './app.component';
 import { routing } from './app.routing';
@@ -19,6 +20,7 @@ export const firebaseConfig = {
   apiKey: '',
   authDomain: '',
   databaseURL: '',
+  projectId: '',
   storageBucket: '',
   messagingSenderId: ''
 };
@@ -33,10 +35,8 @@ export const firebaseConfig = {
   imports: [
     BrowserModule,
     FormsModule,
-    AngularFireModule.initializeApp(firebaseConfig, {
-      provider: AuthProviders.Password,
-      method: AuthMethods.Password,
-    }),
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireAuthModule,
     NgbModule.forRoot(),
     routing
   ],
