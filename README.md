@@ -1,3 +1,16 @@
+# Angular Firebase + Bootstrap Seed Project SAAS Ready
+- Comes with Bootstrap
+- Comes loaded with 3rd party authorization
+- Express added to functions
+- Stripe checkout integration 
+
+
+# 3rd Party Authorization
+Sometimes you need to get obtain the users access token without having the need to create a session. 
+Go
+
+
+
 # Angular + Firebase + Bootstrap
 
 A basic project seed for Angular with user registration and login.

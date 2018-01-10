@@ -7,10 +7,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProfileComponent } from './profile.component';
 import { profileRouting } from './profile.routing';
 import { SharedModule } from '../shared/shared.module';
+import { StripeFormComponent } from '../shared/stripe-form/stripe-form.component';
 
 @NgModule({
   declarations: [
-    ProfileComponent
+    ProfileComponent,
+    StripeFormComponent
   ],
   imports: [
     CommonModule,

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 
@@ -16,13 +17,18 @@ import { HomeComponent } from './home.component';
 import { AlertsService } from './shared/alerts/alerts.service';
 import { AlertsComponent } from './shared/alerts/alerts.component';
 
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {TokenInterceptor} from "./shared/interceptors/token-interceptor";
+
+
+
 export const firebaseConfig = {
-    apiKey: "AdIzaSyDZRMQ1axFmRcg5yv1unNFEqnwXTckXGMg44", /// This is a random test key. you need to change this API key to your API key.
-    authDomain: "",
-    databaseURL: "",
-    projectId: "",
-    storageBucket: "",
-    messagingSenderId: ""
+  apiKey: "AIzaSyCQqiJXZ5eqW09b8eXND2FfsVXwGjojnZM",
+  authDomain: "realtylandingpage.firebaseapp.com",
+  databaseURL: "https://realtylandingpage.firebaseio.com",
+  projectId: "realtylandingpage",
+  storageBucket: "realtylandingpage.appspot.com",
+  messagingSenderId: "529210589827"
 };
 
 @NgModule({
@@ -31,10 +37,12 @@ export const firebaseConfig = {
     HeaderComponent,
     AlertsComponent,
     HomeComponent
+
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    HttpClientModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
     NgbModule.forRoot(),
@@ -45,6 +53,7 @@ export const firebaseConfig = {
     AuthGuard,
     NotAuthGuard,
     AlertsService,
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
