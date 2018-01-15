@@ -1,3 +1,16 @@
+# Angular Firebase + Bootstrap Seed Project SAAS Ready
+- Comes with Bootstrap
+- Comes loaded with 3rd party authorization
+- Express added to functions
+- Stripe checkout integration 
+
+
+# 3rd Party Authorization
+Sometimes you need to get obtain the users access token without having the need to create a session. 
+Go
+
+
+
 # Angular + Firebase + Bootstrap
 
 A basic project seed for Angular with user registration and login.
@@ -12,10 +25,10 @@ change their e-mail address and password.
 Please adapt to your needs :)
 
 This project was generated with
-[Angular CLI](https://github.com/angular/angular-cli) version 1.0.0-rc.1.
+[Angular CLI](https://github.com/angular/angular-cli) version 1.6.3.
 
 It was updated to the settings of Angular CLI version 1.0.0 and currently uses
-Angular version 4.0.0.
+Angular version 5.0.0.
 
 ## Install prerequisites
 

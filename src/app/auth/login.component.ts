@@ -15,11 +15,13 @@ export class LoginComponent implements OnInit {
 
   constructor(private authService: AuthService, private router: Router,
     private alertsService: AlertsService) { }
-  
+
   onSubmit(loginForm: NgForm) {
     this.authService.loginUser(loginForm.value.email, loginForm.value.password).first()
     .subscribe(
       (auth) => {
+
+
         this.router.navigate(['/profile'])
       },
       (error) => {
