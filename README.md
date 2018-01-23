@@ -12,10 +12,10 @@ change their e-mail address and password.
 Please adapt to your needs :)
 
 This project was generated with
-[Angular CLI](https://github.com/angular/angular-cli) version 1.0.0-rc.1.
+[Angular CLI](https://github.com/angular/angular-cli) version 1.6.3.
 
 It was updated to the settings of Angular CLI version 1.0.0 and currently uses
-Angular version 4.0.0.
+Angular version 5.0.0.
 
 ## Install prerequisites
 

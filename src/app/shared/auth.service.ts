@@ -94,7 +94,7 @@ export class AuthService {
   setMailAddress(newUser: User) {
     return this.user.first()
     .flatMap(
-      (user) => {
+      (user: any) => {
         const credential = firebase.auth.EmailAuthProvider.credential(
           user.email, newUser.password
         );
@@ -113,7 +113,7 @@ export class AuthService {
   setPassword(oldPassword, newPassword) {
     return this.user.first()
     .flatMap(
-      (user) => {
+      (user: any) => {
         const credential = firebase.auth.EmailAuthProvider.credential(
           user.email, oldPassword
         );

@@ -17,12 +17,12 @@ import { AlertsService } from './shared/alerts/alerts.service';
 import { AlertsComponent } from './shared/alerts/alerts.component';
 
 export const firebaseConfig = {
-  apiKey: '',
-  authDomain: '',
-  databaseURL: '',
-  projectId: '',
-  storageBucket: '',
-  messagingSenderId: ''
+    apiKey: 'AdIzaSyDZRMQ1axFmRcg5yv1unNFEqnwXTckXGMg44', /// This is a random test key. you need to change this API key to your API key.
+    authDomain: '',
+    databaseURL: '',
+    projectId: '',
+    storageBucket: '',
+    messagingSenderId: ''
 };
 
 @NgModule({
